@@ -1,7 +1,7 @@
 # Eliciting Suppressed Knowledge (ESK)
 
 ## Abstract
-Transformer models possess knowledge they actively suppress during inference. By isolating and probing these suppressed activation patterns, we demonstrate ~10% improvements on TruthfulQA compared to standard activation probes. This confirms LLMs encode truthful information in representations that are deliberately suppressed during generation, suggesting new approaches for mechanistic interpretability and truth extraction.
+Transformer models possess knowledge they actively suppress during inference. By isolating and probing these suppressed activation, we demonstrate small improvements on TruthfulQA compared to standard activation probes. This confirms that supressed activations are a more useful source of knowledge than the model's direct outputs, or hidden states.
 
 ## Background
 Recent mechanistic interpretability research identifies competing neural dynamics in transformers:
@@ -15,6 +15,7 @@ Recent mechanistic interpretability research identifies competing neural dynamic
 Previous work focused on identifying dedicated suppression neurons; we instead examine what information is being transiently suppressed during specific inferences—revealing knowledge deliberately inhibited during standard generation.
 
 ## Hypothesis
+
 Transformer models maintain dual representations of knowledge: the dominant pathway that produces outputs, and suppressed activation patterns that encode alternative (often more truthful) representations. By directly probing these suppressed activations, we can extract knowledge the model "knows" but actively chooses not to express—much like extracting a dissenting opinion forcibly silenced during internal deliberation.
 
 ## Method
@@ -93,3 +94,18 @@ This work opens several promising research avenues:
 
 ## License
 [MIT License](LICENSE)
+
+
+### Appendix: Code
+
+
+Setup
+
+```
+uv sync
+
+code nbs/TQA_regr 3b.ipynb
+
+```
+
+see [TQA_regr 3b.ipynb](nbs/TQA_regr%203b.ipynb)
