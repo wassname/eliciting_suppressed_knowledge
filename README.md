@@ -1,7 +1,9 @@
-# Eliciting Suppressed Knowledge (ESK)
+# Eliciting Suppressed Knowledge (ESK) WIP
 
 ## Abstract
 Transformer models possess knowledge they actively suppress during inference. By isolating and probing these suppressed activation, we demonstrate small improvements on TruthfulQA compared to standard activation probes. This confirms that supressed activations are a more useful source of knowledge than the model's direct outputs, or hidden states.
+
+*This is a Work In Progress. While we have promising results, they should be improved by simple changes to the probing method. We are currently working on these improvements.*
 
 ## Background
 Recent mechanistic interpretability research identifies competing neural dynamics in transformers:
