@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "accelerate>=1.4.0",
     "activation-store",
     "datasets>=3.3.2",
     "einops>=0.8.1",
@@ -22,7 +23,8 @@ dev = [
 ]
 
 [tool.uv.sources]
-activation-store = { git = "https://github.com/wassname/activation_store.git" }
+activation-store = { path = "../../elk/cache_transformer_acts", editable = true }
+# activation-store = { git = "https://github.com/wassname/activation_store.git" }
 
 # [build-system]
 # requires = ["setuptools>=61"]

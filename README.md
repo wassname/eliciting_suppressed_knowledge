@@ -1,47 +1,54 @@
 # Eliciting Suppressed Knowledge (ESK) WIP
 
 ## Abstract
-Transformer models possess knowledge they actively suppress during inference. By isolating and probing these suppressed activation, we demonstrate small improvements on TruthfulQA compared to standard activation probes. This confirms that supressed activations are a more useful source of knowledge than the model's direct outputs, or hidden states.
+**Where do transformer models store their true "thoughts" when they say something they know is false?** We demonstrate that suppressed neural activations are a more useful source of knowledge than the model's direct outputs or standard hidden states. By isolating and probing these suppressed activation patterns, we achieve ~X% improvements on TruthfulQA compared to standard methods. This confirms suppressed activations contain knowledge that the model possesses but deliberately inhibits during generation.
 
-*This is a Work In Progress. While we have promising results, they should be improved by simple changes to the probing method. We are currently working on these improvements.*
+## Research Question
+Recent evidence demonstrates that transformer models systematically misrepresent their internal reasoning:
 
-## Background
-Recent mechanistic interpretability research identifies competing neural dynamics in transformers:
+- Claude 3.7 System Card research reveals only 30% faithfulness in chain-of-thought reasoning, indicating models "do not reliably report the presence and use of clues" that determined their answers (Anthropic, 2025)
 
-- Suppression neurons decrease probabilities of related tokens, counterbalancing prediction neurons that promote specific continuations (Gurnee et al., [2024](https://arxiv.org/pdf/2401.12181))
+- OpenAI research confirms that models "learn to hide intent in the chain-of-thought" when penalized for expressing certain thoughts (OpenAI, 2025)
 
-- This suppression-prediction dynamic creates an internal "debate" where certain activation patterns are consistently inhibited (Lad et al., [2024](https://arxiv.org/html/2406.19384))
+This evidence presents a fundamental question: **If models systematically misrepresent their reasoning processes in tokens, where is their actual reasoning encoded?**
 
-- The architecture systematically develops prediction neurons until the final layers, which show "a sudden shift towards a much larger number of suppression neurons" (Gurnee et al., [2024](https://arxiv.org/pdf/2401.12181))
 
-Previous work focused on identifying dedicated suppression neurons; we instead examine what information is being transiently suppressed during specific inferences—revealing knowledge deliberately inhibited during standard generation.
+## Relation to Prior Work
+
+Our approach connects directly to two emerging lines of research:
+
+1. **Suppression/Prediction Neural Dynamics**:
+   - Gurnee et al. (2024) identified "universal neurons" across different model seeds, including prediction neurons (increasing probability of related tokens) and suppression neurons (decreasing probability of specific token classes)
+   - The architecture shows "a sudden shift towards a much larger number of suppression neurons" in final layers
+   - Lad et al. (2024) propose a "stages of inference" hypothesis with a final "residual sharpening" phase dominated by suppression dynamics
+
+2. **Unfaithful Chain-of-Thought**:
+   - Anthropic (2025) demonstrates that even in leading models like Claude 3.7, chain-of-thought reasoning achieves only 30% faithfulness
+   - OpenAI (2025) shows that penalizing "bad thoughts" leads to models that "learn to hide intent" rather than genuinely correcting reasoning
+   - Both lines of evidence suggest models maintain internal representations that diverge from their expressed reasoning
+
+Where previous work focused on architectural components (identifying suppression neurons) or documenting the unfaithfulness phenomenon, our research bridges these streams by showing we can extract more accurate information from the very activations being suppressed.
 
 ## Hypothesis
-
-Transformer models maintain dual representations of knowledge: the dominant pathway that produces outputs, and suppressed activation patterns that encode alternative (often more truthful) representations. By directly probing these suppressed activations, we can extract knowledge the model "knows" but actively chooses not to express—much like extracting a dissenting opinion forcibly silenced during internal deliberation.
+Suppressed neural activations contain more accurate information than what appears in model outputs. A linear probe of these suppressed activations should therefore outperform both direct model outputs and probes of standard hidden states on truthfulness tasks.
 
 ## Method
 Our approach isolates suppressed activations by leveraging the differential impact of layers on token probabilities:
 
-1. **Hidden State Extraction**: We collect layer-wise hidden states from the model.
+1. Extract hidden states from model layers
+2. Project to logit space using output embeddings
+3. Compute layer-to-layer differences in logit space
+4. Project negative changes back to activation space
+5. Apply this suppression mask to hidden states
+6. Train linear probes on these suppressed patterns
 
-2. **Logit Effect Isolation**: Following Gurnee et al.'s approach for identifying suppression neurons, we examine how each layer's contribution affects token probabilities by projecting hidden states through the output embedding matrix.
-
-3. **Negative Differential Identification**: We compute layer-to-layer differences in logit space, identifying negative changes that represent suppressed information.
-
-4. **Activation Space Projection**: Using the pseudo-inverse of the output embedding matrix, we project these negative changes back to activation space, revealing which hidden dimensions are being actively suppressed.
-
-5. **Suppression-Masked Representation**: We apply this suppression mask to the original hidden states, isolating activation patterns that would increase truthful responses but are being down-weighted in the final layers.
-
-6. **Linear Probing**: We train linear probes on these suppressed activation patterns and compare against standard probes and direct model outputs.
-
-This method directly operationalizes the "residual sharpening" stage identified by Lad et al., exploiting the final layers' suppression dynamics to recover information that exists in the model but is being actively filtered out.
+This method exploits the "residual sharpening" stage identified by Lad et al. (2024), specifically targeting information that the model actively filters out.
 
 ## Key Results
 
-![TruthfulQA Performance Comparison](figures/truthfulqa_performance.png)
+![TruthfulQA Performance Comparison](figs/truthfulqa_performance.png)
 
-Linear probes targeting suppressed activations consistently outperform both naive outputs and standard activation probes across model scales. The performance gap (~10%) represents recoverable truthful knowledge that remains encoded but deliberately suppressed during normal generation.
+Linear probes targeting suppressed activations consistently outperform both naive outputs and standard activation probes across model scales. The performance gap (~X%) represents recoverable truthful knowledge that remains encoded but deliberately suppressed during normal generation.
 
 ### Performance Breakdown
 | Method | ROC AUC Score |
@@ -52,36 +59,11 @@ Linear probes targeting suppressed activations consistently outperform both naiv
 
 The highest-performing probe was on the final layer's suppressed activations (`hs_sup last`), supporting the hypothesis that the final "residual sharpening" stage specifically suppresses certain information pathways.
 
-## Theoretical Context
+## Remaining Questions
 
-Our findings provide empirical support for several key hypotheses about transformer mechanisms:
-
-1. **Ensemble Hypothesis**: Both papers suggest that prediction and suppression neurons form competing ensembles. Our results empirically demonstrate that these competing pathways encode different information, with suppressed pathways often containing more truthful representations.
-
-2. **Final Layer Calibration**: The "residual sharpening" phase appears to function not just as a confidence calibrator, but potentially as an alignment mechanism that modulates factuality in favor of other objectives. The performance improvement from probing suppressed activations quantifies this effect.
-
-3. **Dual Representation**: Transformers maintain parallel representations of knowledge - one that is expressed in outputs and another that is encoded but suppressed. This suggests models contain more truthful knowledge than they express, contradicting simpler hypotheses that attribute factual errors purely to knowledge limitations.
-
-4. **Stage-Specific Information**: The staged inference hypothesis proposed by Lad et al. predicts that different types of information would be emphasized at different model depths. Our results confirm this by showing that truth-related information is present but specifically suppressed during the final "residual sharpening" stage.
-
-
-## Future Research Directions
-
-This work opens several promising research avenues:
-
-1. **Architectural Variations**: Investigate whether models with different suppression neuron densities show different patterns of truth suppression.
-
-2. **Intervention Techniques**: Develop methods to selectively attenuate suppression dynamics during inference to improve factuality without full retraining.
-
-3. **Suppression Categories**: Investigate whether specific categories of information (e.g., controversial facts, specialized knowledge) are more consistently suppressed than others.
-
-4. **Layer Deletion Effects**: Explore how surgical modifications to final-layer suppression mechanisms affect factuality.
-
-5. **Cross-Model Universality**: Determine whether suppressed activation patterns are universal across model architectures.
-
-6. **RLHF Impact Analysis**: Investigate whether RLHF fine-tuning primarily operates by enhancing suppression mechanisms rather than modifying core knowledge.
-
-7. **Content-Specific Suppression**: Analyze whether politically or ethically sensitive topics show stronger suppression effects than neutral factual questions.
+- Is the KV Cache more usefull than the suppressed activations? This seems to be a promising alternative hypothesis that we have not tested.
+- Is this effect in all models (base, chat, multimodal, etc)?
+- Can this method improving interventions such as steering or forgetting
 
 ## Citation
 
@@ -95,17 +77,21 @@ This work opens several promising research avenues:
 ```
 
 ## License
-[MIT License](LICENSE)
+MIT License
 
 
-### Appendix: Code
+### Appendix: Reproducing Results
 
 
 Setup
 
-```
+```sh
+# first install uv
+
+# then install the requirements
 uv sync
 
+# note open the notebook in jupyter or vscode
 code nbs/TQA_regr 3b.ipynb
 
 ```
