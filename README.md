@@ -6,9 +6,9 @@
 ## Research Question
 Recent evidence demonstrates that transformer models systematically misrepresent their internal reasoning:
 
-- Claude 3.7 System Card research reveals only 30% faithfulness in chain-of-thought reasoning, indicating models "do not reliably report the presence and use of clues" that determined their answers (Anthropic, 2025)
+- [Claude 3.7 System Card](https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf) research reveals only 30% faithfulness in chain-of-thought reasoning, indicating models "do not reliably report the presence and use of clues" that determined their answers (Anthropic, 2025)
 
-- OpenAI research confirms that models "learn to hide intent in the chain-of-thought" when penalized for expressing certain thoughts (OpenAI, 2025)
+- OpenAI research confirms that models "learn to hide intent in the chain-of-thought" when penalized for expressing certain thoughts [(OpenAI, 2025)](https://cdn.openai.com/pdf/34f2ada6-870f-4c26-9790-fd8def56387f/CoT_Monitoring.pdf)
 
 This evidence presents a fundamental question: **If models systematically misrepresent their reasoning processes in tokens, where is their actual reasoning encoded?**
 
@@ -18,13 +18,13 @@ This evidence presents a fundamental question: **If models systematically misrep
 Our approach connects directly to two emerging lines of research:
 
 1. **Suppression/Prediction Neural Dynamics**:
-   - Gurnee et al. (2024) identified "universal neurons" across different model seeds, including prediction neurons (increasing probability of related tokens) and suppression neurons (decreasing probability of specific token classes)
+   - [Gurnee et al. (2024)](https://arxiv.org/abs/2401.12181) identified "universal neurons" across different model seeds, including prediction neurons (increasing probability of related tokens) and suppression neurons (decreasing probability of specific token classes)
    - The architecture shows "a sudden shift towards a much larger number of suppression neurons" in final layers
-   - Lad et al. (2024) propose a "stages of inference" hypothesis with a final "residual sharpening" phase dominated by suppression dynamics
+   - [Lad et al. (2024)](https://arxiv.org/html/2406.19384v1) propose a "stages of inference" hypothesis with a final "residual sharpening" phase dominated by suppression dynamics
 
 2. **Unfaithful Chain-of-Thought**:
-   - Anthropic (2025) demonstrates that even in leading models like Claude 3.7, chain-of-thought reasoning achieves only 30% faithfulness
-   - OpenAI (2025) shows that penalizing "bad thoughts" leads to models that "learn to hide intent" rather than genuinely correcting reasoning
+   - [Anthropic (2025)](https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf) demonstrates that even in leading models like Claude 3.7, chain-of-thought reasoning achieves only 30% faithfulness
+   - [OpenAI (2025)](https://cdn.openai.com/pdf/34f2ada6-870f-4c26-9790-fd8def56387f/CoT_Monitoring.pdf) shows that penalizing "bad thoughts" leads to models that "learn to hide intent" rather than genuinely correcting reasoning
    - Both lines of evidence suggest models maintain internal representations that diverge from their expressed reasoning
 
 Where previous work focused on architectural components (identifying suppression neurons) or documenting the unfaithfulness phenomenon, our research bridges these streams by showing we can extract more accurate information from the very activations being suppressed.
