@@ -32,6 +32,12 @@ Where previous work focused on architectural components (identifying suppression
 ## Hypothesis
 Suppressed neural activations contain more accurate information than what appears in model outputs. A linear probe of these suppressed activations should therefore outperform both direct model outputs and probes of standard hidden states on truthfulness tasks.
 
+Alternative hypothesis include:
+- It is non linear (we use linear probes here, this hypothesis not explored)
+- It is in the kv_cache of layers not directly connected to the hidden state (explored below with other activations)
+- it is in the residual stream (explored below)
+- it is in the output logits (explored below)
+
 ## Method
 Our approach isolates suppressed activations by leveraging the differential impact of layers on token probabilities:
 
