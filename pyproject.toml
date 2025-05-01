@@ -7,16 +7,17 @@ requires-python = ">=3.10"
 dependencies = [
     "accelerate>=1.4.0",
     "activation-store",
-    "autoawq>=0.2.7.post3",
+    "autoawq>=0.2.6",
     "datasets>=3.3.2",
     "einops>=0.8.1",
     "jaxtyping>=0.2.38",
     "loguru>=0.7.3",
     "matplotlib>=3.10.1",
     "pandas>=2.2.3",
+    "seaborn>=0.13.2",
     "skorch>=1.1.0",
     "tqdm>=4.67.1",
-    "transformers>=4.49.0",
+    "transformers>=4.51.0",
 ]
 
 [dependency-groups]

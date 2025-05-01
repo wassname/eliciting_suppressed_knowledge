@@ -1,7 +1,7 @@
 # Eliciting Suppressed Knowledge (ESK) WIP
 
 ## Abstract
-**Where do transformer models store their true "thoughts" when they say something they know is false?** We demonstrate that suppressed neural activations are a more useful source of knowledge than the model's direct outputs or standard hidden states. By isolating and probing these suppressed activation patterns, we achieve ~X% improvements on TruthfulQA compared to standard methods. This confirms suppressed activations contain knowledge that the model possesses but deliberately inhibits during generation.
+**Where do transformer models store their true "thoughts" when they say something they know is false?** We demonstrate that suppressed neural activations are a more useful source of knowledge than the model's direct outputs or standard hidden states. By isolating and probing these suppressed activation patterns, we achieve ~TODO% improvements on TruthfulQA compared to standard methods. This confirms suppressed activations contain knowledge that the model possesses but deliberately inhibits during generation.
 
 ## Research Question
 Recent evidence demonstrates that transformer models systematically misrepresent their internal reasoning:
