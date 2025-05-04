@@ -52,7 +52,7 @@ This method exploits the "residual sharpening" stage identified by Lad et al. (2
 
 ## Key Results
 
-![TruthfulQA Performance Comparison](figs/truthfulqa_performance.png)
+![TruthfulQA Performance Comparison](figs/truthfulqa_Qwen_Qwen3-1.7B.png)
 
 Linear probes targeting suppressed activations consistently outperform both naive outputs and standard activation probes across model scales. The performance gap (~X%) represents recoverable truthful knowledge that remains encoded but deliberately suppressed during normal generation.
 
