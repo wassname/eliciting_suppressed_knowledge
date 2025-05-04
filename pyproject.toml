@@ -8,6 +8,7 @@ dependencies = [
     "accelerate>=1.4.0",
     "activation-store",
     "autoawq>=0.2.6",
+    "beartype>=0.20.2",
     "datasets>=3.3.2",
     "einops>=0.8.1",
     "jaxtyping>=0.2.38",
