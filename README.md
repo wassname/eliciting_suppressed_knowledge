@@ -68,18 +68,24 @@ Linear probes targeting suppressed activations consistently outperform both naiv
 
 top reduction for each data type
 
+
+
 | group              | name                                  |    ROC AUC Score | data               |
 |:-------------------|:--------------------------------------|---------:|:-------------------|
-| mixed              | **supressed_hs**(0.1)|magnitude(0.25)|sum | 0.878431 | supressed_hs       |
-| act sink rm        | hidden_states|magnitude(0.99)|std     | 0.862745 | hidden_states      |
-| **supressed_hs**       | supressed_hs(1)|none|sum              | 0.858824 | supressed_hs       |
-| llm prob ratio     | llm_log_prob_true||                   | 0.843137 | llm_log_prob_true  |
-| acts-self_attn     | acts-self_attn|none|mean              | 0.810784 | acts-self_attn     |
-| acts-mlp.up_proj   | acts-mlp.up_proj|none|sum             | 0.763725 | acts-mlp.up_proj   |
-| acts-mlp.down_proj | acts-mlp.down_proj|none|std           | 0.704902 | acts-mlp.down_proj |
-| supr_amounts       | supr_amounts|none|sum                 | 0.703922 | supr_amounts       |
-| hidden_states      | hidden_states|none|flatten            | 0.669608 | hidden_states      |
-| *llm_ans*            | llm_ans||                             | 0.639216 | llm_ans            |
+| mixed              | **supressed_hs**(0.1)\magnitude(0.25)\sum | 0.878431 | supressed_hs       |
+| act sink rm        | hidden_states\magnitude(0.99)\std     | 0.862745 | hidden_states      |
+| **supressed_hs**       | supressed_hs(1)\none\sum              | 0.858824 | supressed_hs       |
+| llm prob ratio     | llm_log_prob_true\|                   | 0.843137 | llm_log_prob_true  |
+| acts-self_attn     | acts-self_attn\none\mean              | 0.810784 | acts-self_attn     |
+| acts-mlp.up_proj   | acts-mlp.up_proj\none\sum             | 0.763725 | acts-mlp.up_proj   |
+| acts-mlp.down_proj | acts-mlp.down_proj\none\std           | 0.704902 | acts-mlp.down_proj |
+| supr_amounts       | supr_amounts\none\sum                 | 0.703922 | supr_amounts       |
+| hidden_states      | hidden_states\none\flatten            | 0.669608 | hidden_states      |
+| *llm_ans*            | llm_ans\|                             | 0.639216 | llm_ans            |
+
+
+
+
 
 
 
