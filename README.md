@@ -1,7 +1,14 @@
 # Eliciting Suppressed Knowledge (ESK) WIP
 
 ## Abstract
-**Where do transformer models store their true "thoughts" when they say something they know is false?** We demonstrate that suppressed neural activations are a more useful source of knowledge than the model's direct outputs or standard hidden states. By isolating and probing these suppressed activation patterns, we achieve ~TODO% improvements on TruthfulQA compared to standard methods. This confirms suppressed activations contain knowledge that the model possesses but deliberately inhibits during generation.
+**Where do transformer models store their true "thoughts" when they say something they know is false?** We demonstrate that suppressed neural activations are a more useful source of knowledge than the model's direct outputs or standard hidden states. By isolating and probing these suppressed activation patterns, we achieve ~20% AUROC improvements on TruthfulQA compared to the LLM answer, and . This confirms suppressed activations contain knowledge that the model possesses but deliberately inhibits during generation.
+
+
+## Key Results
+
+![TruthfulQA Performance Comparison](figs/truthfulqa_Qwen_Qwen3-1.7B.png)
+
+Linear probes targeting suppressed activations consistently outperform both naive outputs and standard activation probes across model scales. The performance gap (~X%) represents recoverable truthful knowledge that remains encoded but deliberately suppressed during normal generation.
 
 ## Research Question
 Recent evidence demonstrates that transformer models systematically misrepresent their internal reasoning:
@@ -57,13 +64,26 @@ This method exploits the "residual sharpening" stage identified by Lad et al. (2
 Linear probes targeting suppressed activations consistently outperform both naive outputs and standard activation probes across model scales. The performance gap (~X%) represents recoverable truthful knowledge that remains encoded but deliberately suppressed during normal generation.
 
 ### Performance Breakdown
-| Method | ROC AUC Score |
-|--------|---------------|
-| LLM direct output | 0.53 |
-| Hidden states (regular probe) | 0.62 |
-| **Suppressed activations (ESK)** | **0.64** |
 
-The highest-performing probe was on the final layer's suppressed activations (`hs_sup last`), supporting the hypothesis that the final "residual sharpening" stage specifically suppresses certain information pathways.
+
+top reduction for each data type
+
+| group              | name                                  |    ROC AUC Score | data               |
+|:-------------------|:--------------------------------------|---------:|:-------------------|
+| mixed              | **supressed_hs**(0.1)|magnitude(0.25)|sum | 0.878431 | supressed_hs       |
+| act sink rm        | hidden_states|magnitude(0.99)|std     | 0.862745 | hidden_states      |
+| **supressed_hs**       | supressed_hs(1)|none|sum              | 0.858824 | supressed_hs       |
+| llm prob ratio     | llm_log_prob_true||                   | 0.843137 | llm_log_prob_true  |
+| acts-self_attn     | acts-self_attn|none|mean              | 0.810784 | acts-self_attn     |
+| acts-mlp.up_proj   | acts-mlp.up_proj|none|sum             | 0.763725 | acts-mlp.up_proj   |
+| acts-mlp.down_proj | acts-mlp.down_proj|none|std           | 0.704902 | acts-mlp.down_proj |
+| supr_amounts       | supr_amounts|none|sum                 | 0.703922 | supr_amounts       |
+| hidden_states      | hidden_states|none|flatten            | 0.669608 | hidden_states      |
+| *llm_ans*            | llm_ans||                             | 0.639216 | llm_ans            |
+
+
+
+The highest-performing probe was on the final layer's suppressed activations (`supressed_hs`), following by filtering out high magnitudes (to remove activation sinks). This supports the hypothesis that the final "residual sharpening" stage specifically suppresses certain information pathways.
 
 ## Remaining Questions
 
