@@ -89,7 +89,7 @@ top reduction for each data type
 
 
 
-The highest-performing probe was on the final layer's suppressed activations (`supressed_hs`), following by filtering out high magnitudes (to remove activation sinks). This supports the hypothesis that the final "residual sharpening" stage specifically suppresses certain information pathways.
+The highest-performing probe was on the final layer's suppressed activations (`supressed_hs`), following by filtering out high magnitudes (to remove [activation sinks](https://arxiv.org/abs/2410.10781)). This supports the hypothesis that the final "residual sharpening" stage specifically suppresses certain information pathways.
 
 ## Remaining Questions
 
