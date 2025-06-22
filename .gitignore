@@ -1,3 +1,7 @@
+claude_temp*.md
+
+data/
+
 # Python-generated files
 __pycache__/
 *.py[oc]
