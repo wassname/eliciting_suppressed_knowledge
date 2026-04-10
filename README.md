@@ -36,6 +36,8 @@ Our approach connects directly to two emerging lines of research:
 
 Where previous work focused on architectural components (identifying suppression neurons) or documenting the unfaithfulness phenomenon, our research bridges these streams by showing we can extract more accurate information from the very activations being suppressed.
 
+See also [Do Llamas Work in English? On the Latent Language of Multilingual Transformers](https://arxiv.org/abs/2402.10588)
+
 ## Hypothesis
 Suppressed neural activations contain more accurate information than what appears in model outputs. A linear probe of these suppressed activations should therefore outperform both direct model outputs and probes of standard hidden states on truthfulness tasks.
 
